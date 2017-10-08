@@ -58,11 +58,10 @@
           updateDisplay(kraken.calculate({
             fees: {
               maker: $('#form-trade-fees').val().split("/")[0],
-              taker: $('#form-trade-fees').val().split("/")[1],
-              opening: 0.01, // OK for BTC only
-              rollover: 0.01 // OK for BTC only
+              taker: $('#form-trade-fees').val().split("/")[1]
             },
             trade: {
+              asset: $('#form-trade-asset').val(),
               direction: $('#form-trade-direction').val(),
               amount: $('#form-trade-amount').val(),
               price_in: $('#form-trade-opening-price').val(),
@@ -74,9 +73,6 @@
             }
           }));
         }
-
-
-
       });
       form.addEventListener("keyup", function(event) {
         form.classList.add("was-validated");
@@ -115,6 +111,14 @@
               </select>
             </div>
           </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-asset">Asset</label>
+              <select class="form-control" id="form-trade-asset">
+                <option value="btc" selected>BTC</option>
+                <option value="other">Other (ETH, ETC...)</option>
+              </select>
+            </div>
         </div>
       </fieldset>
 
@@ -136,9 +140,6 @@
             <div class="form-group">
               <label for="form-trade-amount">Amount</label>
               <input id="form-trade-amount" type="number" min="0" step="0.01" class="form-control" placeholder="" required>
-  <!--             <div class="invalid-feedback">
-                Please provide a valid amount (use "." as decimal separator)
-              </div> -->
             </div>
           </div>
         </div>
@@ -148,9 +149,6 @@
             <div class="form-group">
               <label for="form-trade-opening-price">Opening Price</label>
               <input id="form-trade-opening-price" type="number" min="0" step="0.01" class="form-control" placeholder="" required>
-  <!--             <div class="invalid-feedback">
-                Please provide a valid amount (use "." as decimal separator)
-              </div> -->
             </div>
           </div>
           <div class="col">
@@ -169,9 +167,6 @@
             <div class="form-group">
               <label for="form-trade-closing-price">Closing Price</label>
               <input id="form-trade-closing-price" type="number" min="0" step="0.01" class="form-control" placeholder="" required>
-  <!--             <div class="invalid-feedback">
-                Please provide a valid amount (use "." as decimal separator)
-              </div> -->
             </div>
           </div>
           <div class="col">
