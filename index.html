@@ -1,0 +1,253 @@
+<html>
+<head>
+  <title>Kraken Fees Calculator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  <style type="text/css">
+    body {
+      margin: 40px;
+    }
+    hr {
+      margin: 40px 0;
+      border: 1px dotted #ccc;
+    }
+    #main-container {
+      width: 800px;
+      margin: auto;
+    }
+    tr.total {
+      background-color: #fafafa;
+    }
+    tr.total td {
+      font-weight: bold;
+    }
+    td.fee, td.number {
+      text-align: right;
+    }
+  </style>
+
+  <script type="text/javascript" src="lib/kraken-calculator-lib.js"></script>
+
+  <script>
+
+
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+
+    function updateDisplay(kraken_calculator) {
+      $('#opening_fees').text(kraken_calculator.fees.opening);
+      $('#closing_fees').text(kraken_calculator.fees.closing);
+      $('#margin_opening_fees').text(kraken_calculator.fees.margin_opening);
+      $('#margin_rollover_fees').text(kraken_calculator.fees.margin_rollover);
+      $('#closing_fees').text(kraken_calculator.fees.closing);
+      $('#total_fees').text(kraken_calculator.result.total_fees);
+      $('#pnl').text(kraken_calculator.result.profit);
+    }
+
+
+    "use strict";
+    window.addEventListener("load", function() {
+      var form = document.getElementById("caculator_form");
+      $(form).on('keyup change', 'input, select, textarea', function(){
+        if (form.checkValidity() == false) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else {
+          updateDisplay(kraken.calculate({
+            fees: {
+              maker: $('#form-trade-fees').val().split("/")[0],
+              taker: $('#form-trade-fees').val().split("/")[1],
+              opening: 0.01, // OK for BTC only
+              rollover: 0.01 // OK for BTC only
+            },
+            trade: {
+              direction: $('#form-trade-direction').val(),
+              amount: $('#form-trade-amount').val(),
+              price_in: $('#form-trade-opening-price').val(),
+              type_in: $('#form-trade-opening-type').val(),
+              price_out: $('#form-trade-closing-price').val(),
+              type_out: $('#form-trade-closing-type').val(),
+              leverage: $('#form-trade-leverage').val(),
+              duration: $('#form-trade-leverage-duration').val()   
+            }
+          }));
+        }
+
+
+
+      });
+      form.addEventListener("keyup", function(event) {
+        form.classList.add("was-validated");
+      }, false);
+    }, false);
+  }());
+
+  </script>
+
+
+</head>
+<body>
+
+  <div id="main-container">
+    <h1>Kraken Fees Calculator</h1>
+    <p>This tool allows you to determine the amount of fees you will pay on Kraken.</p>
+
+    <form id="caculator_form" novalidate>
+
+      <fieldset>
+        <legend>Account</legend>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-fees">Fees</label>
+              <select class="form-control" id="form-trade-fees">
+                <option value="0.16/0.26" selected>0.16 / 0.26% (default)</option>
+                <option value="0.14/0.24">0.14 / 0.24%</option>
+                <option value="0.12/0.22">0.12 / 0.22%</option>
+                <option value="0.10/0.20">0.10 / 0.20%</option>
+                <option value="0.08/0.18">0.08 / 0.18%</option>
+                <option value="0.06/0.16">0.06 / 0.16%</option>
+                <option value="0.04/0.14">0.04 / 0.14%</option>
+                <option value="0.02/0.12">0.02 / 0.12%</option>
+                <option value="0.00/0.10">0.00 / 0.10%</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <hr>
+
+      <fieldset>
+        <legend>Trade</legend>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-direction">Direction</label>
+              <select class="form-control" id="form-trade-direction">
+                <option value="long" selected>Long</option>
+                <option value="short">Short</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-amount">Amount</label>
+              <input id="form-trade-amount" type="number" min="0" step="0.01" class="form-control" placeholder="" required>
+  <!--             <div class="invalid-feedback">
+                Please provide a valid amount (use "." as decimal separator)
+              </div> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-opening-price">Opening Price</label>
+              <input id="form-trade-opening-price" type="number" min="0" step="0.01" class="form-control" placeholder="" required>
+  <!--             <div class="invalid-feedback">
+                Please provide a valid amount (use "." as decimal separator)
+              </div> -->
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-opening-type">Taker or Maker</label>
+              <select class="form-control" id="form-trade-opening-type">
+                <option value="maker" selected>Maker</option>
+                <option value="taker">Taker</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-closing-price">Closing Price</label>
+              <input id="form-trade-closing-price" type="number" min="0" step="0.01" class="form-control" placeholder="" required>
+  <!--             <div class="invalid-feedback">
+                Please provide a valid amount (use "." as decimal separator)
+              </div> -->
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-closing-type">Taker or Maker</label>
+              <select class="form-control" id="form-trade-closing-type">
+                <option value="maker" selected>Maker</option>
+                <option value="taker">Taker</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <hr>
+
+      <fieldset>
+        <legend>Margin Trading</legend>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-leverage">Leverage</label>
+              <select class="form-control" id="form-trade-leverage">
+                <option value="1" selected>No Leverage</option>
+                <option value="2">Leverage 2:1</option>
+                <option value="3">Leverage 3:1</option>
+                <option value="4">Leverage 4:1</option>
+                <option value="5">Leverage 5:1</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="form-trade-leverage-duration">Duration (hours)</label>
+              <input id="form-trade-leverage-duration" type="number" class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <hr>
+
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Opening fees</td>
+            <td class="fee" id="opening_fees"></td>
+          </tr>
+          <tr>
+            <td>Closing fees</td>
+            <td class="fee" id="closing_fees"></td>
+          </tr>
+          <tr>
+            <td>Margin opening fees</td>
+            <td class="fee" id="margin_opening_fees"></td>
+          </tr>
+          <tr>
+            <td>Margin rollover fees</td>
+            <td class="fee" id="margin_rollover_fees"></td>
+          </tr>
+          <tr class="total">
+            <td>Total Fees</td>
+            <td class="number" id="total_fees"></td>
+          </tr>
+          <tr class="total">
+            <td>PNL</td>
+            <td class="number" id="pnl"></td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </form>
+
+
+  </div>
+
+</body>
+</html>
