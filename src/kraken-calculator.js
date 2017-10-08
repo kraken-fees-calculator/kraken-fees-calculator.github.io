@@ -34,7 +34,8 @@ module.exports = {
     if (options.trade.leverage == 1) {
       return {
         opening: 0,
-        rollover: 0
+        rollover: 0,
+        leverage: 1
       }
     } else if (options.trade.leverage > 1) {
       var real_leverage = options.trade.leverage-1
@@ -48,7 +49,8 @@ module.exports = {
       }
       return {
         opening: (real_leverage * options.trade.amount * options.trade.price_in * margin_opening_fees / 100),
-        rollover: (real_leverage * options.trade.amount * options.trade.price_in * margin_rollover_fees / 100 * Math.floor(duration/4))
+        rollover: (real_leverage * options.trade.amount * options.trade.price_in * margin_rollover_fees / 100 * Math.floor(duration/4)),
+        leverage: real_leverage
       }
     };
   },
@@ -66,9 +68,9 @@ module.exports = {
     var total_fees = fees.reduce((pv, cv) => pv+cv, 0);
 
     if (options.trade.direction === "long") {
-      var profit = (options.trade.price_out - options.trade.price_in) * (options.trade.leverage-1) * options.trade.amount - total_fees
+      var profit = (options.trade.price_out - options.trade.price_in) * margin_fees.leverage * options.trade.amount - total_fees
     } else if (options.trade.direction === "short") {
-      var profit = (options.trade.price_in - options.trade.price_out) * (options.trade.leverage-1) * options.trade.amount - total_fees     
+      var profit = (options.trade.price_in - options.trade.price_out) * margin_fees.leverage * options.trade.amount - total_fees     
     };
 
     return {
