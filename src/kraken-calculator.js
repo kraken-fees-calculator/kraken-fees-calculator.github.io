@@ -66,9 +66,9 @@ module.exports = {
     var total_fees = fees.reduce((pv, cv) => pv+cv, 0);
 
     if (options.trade.direction === "long") {
-      var profit = (options.trade.price_out - options.trade.price_in) * options.trade.leverage * options.trade.amount - total_fees
+      var profit = (options.trade.price_out - options.trade.price_in) * (options.trade.leverage-1) * options.trade.amount - total_fees
     } else if (options.trade.direction === "short") {
-      var profit = (options.trade.price_in - options.trade.price_out) * options.trade.leverage * options.trade.amount - total_fees     
+      var profit = (options.trade.price_in - options.trade.price_out) * (options.trade.leverage-1) * options.trade.amount - total_fees     
     };
 
     return {
