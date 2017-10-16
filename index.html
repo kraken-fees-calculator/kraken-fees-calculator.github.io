@@ -86,7 +86,8 @@
     $('#margin_rollover_fees').text(kraken_calculator.fees.margin_rollover);
     $('#closing_fees').text(kraken_calculator.fees.closing);
     $('#total_fees').text(kraken_calculator.result.total_fees);
-    $('#pnl').text(kraken_calculator.result.profit);
+    $('#profit').text(kraken_calculator.result.profit);
+    $('#pnl').text(kraken_calculator.result.net_profit);
   }
 
   function saveConfig(config) {
@@ -118,11 +119,11 @@
 
   function getConfigLabel(config) {
     var direction = (config.trade.direction === "long") ? "L" : "S";
-    var inType = (config.trade.type_in === "maker") ? "L" : "M";
-    var outType = (config.trade.type_out === "maker") ? "L" : "M";
+    var inType = (config.trade.type_in === "maker") ? "M" : "T";
+    var outType = (config.trade.type_out === "maker") ? "M" : "T";
     if (config.trade.leverage > 1) {
       var leverage = "L"+config.trade.leverage
-      var duration = "D"+(config.trade.duration || 0)
+      var duration = "D"+(config.trade.duration || 1)
     };
     return [ direction, config.trade.amount, config.trade.asset.toUpperCase(), config.trade.price_in+inType, config.trade.price_out+outType, leverage, duration ].join(' ');
   }
@@ -286,8 +287,8 @@
                 <div class="form-group">
                   <label for="form-trade-opening-type">Order type</label>
                   <select class="form-control" id="form-trade-opening-type">
-                    <option value="maker" selected>Limit</option>
-                    <option value="taker">Market</option>
+                    <option value="maker" selected>Maker</option>
+                    <option value="taker">Taker</option>
                   </select>
                 </div>
               </div>
@@ -304,8 +305,8 @@
                 <div class="form-group">
                   <label for="form-trade-closing-type">Order type</label>
                   <select class="form-control" id="form-trade-closing-type">
-                    <option value="maker" selected>Limit</option>
-                    <option value="taker">Market</option>
+                    <option value="maker" selected>Maker</option>
+                    <option value="taker">Taker</option>
                   </select>
                 </div>
               </div>
@@ -342,21 +343,26 @@
 
           <table class="table">
             <tbody>
-              <tr>
-                <td>Opening fees</td>
-                <td class="fee" id="opening_fees"></td>
+              <tr class="total">
+                <td>Profit</td>
+                <td class="number" id="profit"></td>
               </tr>
               <tr>
-                <td>Closing fees</td>
-                <td class="fee" id="closing_fees"></td>
+                <td>Opening fees</td>
+                <td class="number fee" id="opening_fees"></td>
               </tr>
               <tr>
                 <td>Margin opening fees</td>
-                <td class="fee" id="margin_opening_fees"></td>
+                <td class="number fee" id="margin_opening_fees"></td>
               </tr>
               <tr>
+                <td>Closing fees</td>
+                <td class="number fee" id="closing_fees"></td>
+              </tr>
+
+              <tr>
                 <td>Margin rollover fees</td>
-                <td class="fee" id="margin_rollover_fees"></td>
+                <td class="number fee" id="margin_rollover_fees"></td>
               </tr>
               <tr class="total">
                 <td>Total Fees</td>
