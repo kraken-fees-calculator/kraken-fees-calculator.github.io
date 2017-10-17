@@ -52,6 +52,9 @@
     td.fee, td.number {
       text-align: right;
     }
+    tr.margin {
+      display: none;
+    }
 
 
   </style>
@@ -87,7 +90,13 @@
     $('#closing_fees').text(kraken_calculator.fees.closing);
     $('#total_fees').text(kraken_calculator.result.total_fees);
     $('#profit').text(kraken_calculator.result.profit);
-    $('#pnl').text(kraken_calculator.result.net_profit);
+    $('#net_profit').text(kraken_calculator.result.net_profit);
+    $('#net_profit_percentage').text(kraken_calculator.result.net_profit_percentage+"%");
+    if (kraken_calculator.config.trade.leverage > 1) {
+      $('tr.margin').show()
+    } else {
+      $('tr.margin').hide()
+    }
   }
 
   function saveConfig(config) {
@@ -351,16 +360,16 @@
                 <td>Opening fees</td>
                 <td class="number fee" id="opening_fees"></td>
               </tr>
-              <tr>
+              <tr class="margin">
                 <td>Margin opening fees</td>
-                <td class="number fee" id="margin_opening_fees"></td>
+                <td class="number fee margin" id="margin_opening_fees"></td>
               </tr>
               <tr>
                 <td>Closing fees</td>
                 <td class="number fee" id="closing_fees"></td>
               </tr>
 
-              <tr>
+              <tr class="margin">
                 <td>Margin rollover fees</td>
                 <td class="number fee" id="margin_rollover_fees"></td>
               </tr>
@@ -369,8 +378,12 @@
                 <td class="number" id="total_fees"></td>
               </tr>
               <tr class="total">
-                <td>PNL</td>
-                <td class="number" id="pnl"></td>
+                <td>Net profit</td>
+                <td class="number" id="net_profit"></td>
+              </tr>
+              <tr class="total">
+                <td>Net profit %</td>
+                <td class="number" id="net_profit_percentage"></td>
               </tr>
             </tbody>
           </table>

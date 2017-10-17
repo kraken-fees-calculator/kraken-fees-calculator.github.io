@@ -26,6 +26,10 @@
 
 module.exports = {
 
+  getValue: function(amount, price) {
+    return amount * price
+  },
+
   getTradeFees: function(fees, amount, price) {
     return amount * price * fees / 100
   },
@@ -56,6 +60,8 @@ module.exports = {
 
   calculate: function(options) {
     var fees = []
+    var value_in = this.getValue(options.trade.amount, options.trade.price_in)
+    var value_out = this.getValue(options.trade.amount, options.trade.price_out)
     var opening_fees = this.getTradeFees(eval('options.fees.' + options.trade.type_in), options.trade.amount, options.trade.price_in)
     var closing_fees = this.getTradeFees(eval('options.fees.' + options.trade.type_out), options.trade.amount, options.trade.price_out)
     var margin_fees = this.getMarginFees(options)
@@ -75,6 +81,7 @@ module.exports = {
     };
 
     return {
+      'config': options,
       'fees': {
         'opening': opening_fees.toFixed(2),
         'closing': closing_fees.toFixed(2),
@@ -82,9 +89,12 @@ module.exports = {
         'margin_rollover': margin_rollover_fees.toFixed(2)
       },
       'result': {
+        'value_in': value_in.toFixed(2),
+        'value_out': value_out.toFixed(2),
         'total_fees': total_fees.toFixed(2),
         'profit': profit.toFixed(2),
-        'net_profit': net_profit.toFixed(2)
+        'net_profit': net_profit.toFixed(2),
+        'net_profit_percentage': ((((value_in + net_profit) / value_in) - 1) * 100).toFixed(2)
       }
     }
 
