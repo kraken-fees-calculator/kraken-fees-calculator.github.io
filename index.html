@@ -83,6 +83,8 @@
   }
 
   function updateDisplay(kraken_calculator) {
+    $('#value_in').text(kraken_calculator.result.value_in);
+    $('#value_out').text(kraken_calculator.result.value_out);
     $('#opening_fees').text(kraken_calculator.fees.opening);
     $('#closing_fees').text(kraken_calculator.fees.closing);
     $('#margin_opening_fees').text(kraken_calculator.fees.margin_opening);
@@ -352,6 +354,14 @@
 
           <table class="table">
             <tbody>
+              <tr>
+                <td>Opening</td>
+                <td class="number" id="value_in"></td>
+              </tr>
+              <tr>
+                <td>Closing</td>
+                <td class="number" id="value_out"></td>
+              </tr>
               <tr class="total">
                 <td>Profit</td>
                 <td class="number" id="profit"></td>
