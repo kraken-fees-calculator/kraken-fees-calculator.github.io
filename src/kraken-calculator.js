@@ -52,7 +52,7 @@ module.exports = {
       }
       return {
         opening: (options.trade.amount * options.trade.price_in * margin_opening_fees / 100),
-        rollover: (options.trade.amount * options.trade.price_in * margin_rollover_fees / 100 * Math.ceil(duration/4)),
+        rollover: ((1-(1/options.trade.leverage)) * options.trade.amount * options.trade.price_in * margin_rollover_fees / 100 * Math.ceil(duration/4)),
         leverage: options.trade.leverage
       }
     };
