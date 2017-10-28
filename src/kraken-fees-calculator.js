@@ -91,7 +91,6 @@ class KrakenFeesCalculator {
    * @return {number} trade value
    */
   getMaxBuyableAmount(value, price, fees) {
-    console.log(value)
     return ((value/price)*(1-(fees/100))).toFixed(8)
   }
 
@@ -140,7 +139,7 @@ class KrakenFeesCalculator {
         'net_profit': net_profit.toFixed(2),
         'net_profit_percentage': ((((value_in + net_profit) / value_in) - 1) * 100).toFixed(2),
         'accumulation': accumulation,
-        'accumulation¨percentage': (((accumulation / options.trade.amount) - 1) * 100).toFixed(2),
+        'accumulation_percentage': (((accumulation / options.trade.amount) - 1) * 100).toFixed(2),
       }
     }
 
