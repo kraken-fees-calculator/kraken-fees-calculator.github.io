@@ -1,8 +1,7 @@
 # Kraken Fees Calculator
 
-## Install
+## Build
 
 ```
-npm install -g browserify
-browserify kraken.js > lib/kraken-calculator-lib.js
+npm run build
 ```

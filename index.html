@@ -52,16 +52,19 @@
     td.fee, td.number {
       text-align: right;
     }
-    tr.margin {
+    tr.margin, tr.accumulation {
       display: none;
     }
 
 
   </style>
 
-  <script type="text/javascript" src="lib/kraken-calculator-lib.js"></script>
+  <script type="text/javascript" src="build/kraken-fees-calculator.js"></script>
 
   <script>
+
+  var KFC = KrakenFeesCalculator
+
   function setKrakenConfiguration() {
     return {
       fees: {
@@ -91,15 +94,23 @@
     $('#margin_rollover_fees').text(kraken_calculator.fees.margin_rollover);
     $('#closing_fees').text(kraken_calculator.fees.closing);
     $('#total_fees').text(kraken_calculator.result.total_fees);
-    $('#profit').text(kraken_calculator.result.profit);
+    $('#gross_margin').text(kraken_calculator.result.profit);
     $('#net_profit').text(kraken_calculator.result.net_profit);
     $('#net_profit_percentage').text(kraken_calculator.result.net_profit_percentage+"%");
+    $('#accumulation').text(kraken_calculator.result.accumulation);
+    $('#accumulation_percentage').text(kraken_calculator.result.accumulation_percentage);
     if (kraken_calculator.config.trade.leverage > 1) {
       $('tr.margin').show()
     } else {
       $('tr.margin').hide()
     }
+    if (kraken_calculator.config.trade.direction == "short") {
+      $('tr.accumulation').show()
+    } else {
+      $('tr.accumulation').hide()
+    }
   }
+
 
   function saveConfig(config) {
     var configToSave = JSON.stringify(config);
@@ -150,7 +161,7 @@
     $('#form-trade-closing-type').val(config.trade.type_out)
     $('#form-trade-leverage').val(config.trade.leverage)
     $('#form-trade-leverage-duration').val(config.trade.duration)
-    updateDisplay(kraken.calculate(setKrakenConfiguration()));
+    updateDisplay(new KFC(setKrakenConfiguration()));
     $("#saveConfigBtn").attr('disabled', 'disabled');
   }
 
@@ -202,7 +213,7 @@
           $("#saveConfigBtn").attr('disabled','disabled');
         } else {
           // let's update UI using kraken calculator returned object
-          updateDisplay(kraken.calculate(setKrakenConfiguration()));
+          updateDisplay(new KFC(setKrakenConfiguration()));
           $("#saveConfigBtn").removeAttr('disabled');
         }
       });
@@ -233,7 +244,10 @@
 
         <form id="caculator_form" novalidate>
           <h1>Kraken Fees Calculator</h1>
-          <p>Estimate your next trade fees / profit on Kraken</p>
+          <p>
+            Estimate your next trade fees / profit on Kraken.<br />
+            When shorting, you can estimate your profit or your potential coin accumulation.
+          </p>
 
           <fieldset>
             <legend>Account</legend>
@@ -355,16 +369,16 @@
           <table class="table">
             <tbody>
               <tr>
-                <td>Opening</td>
+                <td>Opening value</td>
                 <td class="number" id="value_in"></td>
               </tr>
               <tr>
-                <td>Closing</td>
+                <td>Closing value</td>
                 <td class="number" id="value_out"></td>
               </tr>
               <tr class="total">
-                <td>Profit</td>
-                <td class="number" id="profit"></td>
+                <td>Gross Margin</td>
+                <td class="number" id="gross_margin"></td>
               </tr>
               <tr>
                 <td>Opening fees</td>
@@ -388,12 +402,28 @@
                 <td class="number" id="total_fees"></td>
               </tr>
               <tr class="total">
-                <td>Net profit</td>
+                <td>Profit</td>
+                <td class="number"></td>
+              </tr>
+              <tr>
+                <td>Net Profit</td>
                 <td class="number" id="net_profit"></td>
               </tr>
-              <tr class="total">
+              <tr>
                 <td>Net profit %</td>
                 <td class="number" id="net_profit_percentage"></td>
+              </tr>
+              <tr class="total accumulation">
+                <td>Accumulation</td>
+                <td class="number"></td>
+              </tr>
+              <tr class="accumulation">
+                <td>Coin buyable</td>
+                <td class="number" id="accumulation"></td>
+              </tr>
+              <tr class="accumulation">
+                <td>Coin accumulation %</td>
+                <td class="number" id="accumulation_percentage"></td>
               </tr>
             </tbody>
           </table>
