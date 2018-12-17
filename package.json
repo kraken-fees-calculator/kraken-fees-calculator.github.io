@@ -1,0 +1,35 @@
+{
+  "name": "kraken-fees-calculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "dependencies": {
+    "esdoc": "^1.0.3",
+    "esdoc-standard-plugin": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.8.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --progress -p",
+    "doc": "esdoc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kraken-fees-calculator/kraken-fees-calculator.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kraken-fees-calculator/kraken-fees-calculator.github.io/issues"
+  },
+  "homepage": "https://github.com/kraken-fees-calculator/kraken-fees-calculator.github.io#readme"
+}
